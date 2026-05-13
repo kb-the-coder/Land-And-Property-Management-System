@@ -11,4 +11,4 @@ export const ownershipTransferRouter = express.Router();
 ownershipTransferRouter.post("/register", Register);
 ownershipTransferRouter.get("/display", Display);
 ownershipTransferRouter.put("/update/:id", Update);
-ownershipTransferRouter.put("/delete/:id", RemoveTransfer);
+ownershipTransferRouter.delete("/delete/:id", RemoveTransfer);

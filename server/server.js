@@ -6,6 +6,7 @@ import { landOwnerRouter } from "./Router/LandOwnerRouter.js";
 import { landParcelRouter } from "./Router/LandParcelRoute.js";
 import { ownershipTransferRouter } from "./Router/OwnershipTransferRouter.js";
 import { paymentReceiptRouter } from "./Router/PaymentReceiptRouter.js";
+import { userRouter } from "./Router/UserRouter.js";
 
 // Prepare Express Enviroment Function
 const app = express();
@@ -35,7 +36,7 @@ app.get("/", (req, res) => {
 });
 
 // API Routes
-
+app.use("/api/user",userRouter)
 app.use("/api/owner", landOwnerRouter);
 app.use("/api/land", landParcelRouter);
 app.use("/api/transfer", ownershipTransferRouter);

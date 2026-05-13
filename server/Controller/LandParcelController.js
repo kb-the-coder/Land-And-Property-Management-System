@@ -37,10 +37,14 @@ export const Display = async (req, res) => {
   try {
     const { id } = req.params;
     if (id) {
-      const parcel = await Parcel.findById({ _id: id });
+      const parcel = await Parcel.findById({ _id: id }).populate(
+        "land_owner_id",
+      );
       return res.json({ success: true, parcel });
     }
-    const Land = await Parcel.find().sort({ createdAt: -1 });
+    const Land = await Parcel.find()
+      .populate("land_owner_id")
+      .sort({ createdAt: -1 });
     return res.json({ success: true, Land });
   } catch (error) {
     res.json({ success: false, message: error.message });

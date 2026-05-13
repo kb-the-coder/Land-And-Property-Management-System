@@ -1,17 +1,18 @@
 import Parcel from "../Models/LandParcelModel.js";
 import Transfer from "../Models/OwnershipTransferModel.js";
+import Receipt from "../Models/PaymentReceiptModel.js";
 
 // Calculate Transfer Function
 
 const transferFees = (area_sqm, transfer_reason) => {
   let transfer_fees = 0;
   if (area_sqm > 500) {
-    transfer_fees += landSqm.area_sqm * 800;
+    transfer_fees += area_sqm * 800;
   }
-  transfer_fees += landSqm.area_sqm * 500;
+  transfer_fees += area_sqm * 500;
 
   if (transfer_reason == "inheritance") {
-    (transfer_fees * 20) / 100;
+    transfer_fees = (transfer_fees * 20) / 100;
   }
 
   return transfer_fees;
@@ -30,19 +31,27 @@ export const Register = async (req, res) => {
     } = req.body;
     if (
       !parcelId ||
-      transfer_date ||
-      old_ownerId ||
-      new_ownerId ||
-      transfer_reason
+      !transfer_date ||
+      !old_ownerId ||
+      !new_ownerId ||
+      !transfer_reason
     ) {
       return res.json({ success: false, message: "Sorry! Fill All Field" });
     }
 
-    const landSqm = Parcel.findById({ _id: parcelId });
+    if(old_ownerId == new_ownerId){
+      return res.json({success:false,message:"This Is Already Your Land"})
+    }
+
+    const landSqm = await Parcel.findById({ _id: parcelId });
+
+
+    if (landSqm.land_owner_id !== old_ownerId) {
+      return res.json({succcess:false,message:"This is Not Owner Of this Land"});
+    }
 
     if (
-      landSqm.parcel_status !== "for sale" ||
-      landSqm.parcel_status !== "available"
+      landSqm.parcel_status == "not for sale" 
     ) {
       return res.json({
         success: false,
@@ -51,7 +60,13 @@ export const Register = async (req, res) => {
       });
     }
 
+    const checkPay =await Transfer.findOne({ parcelId: parcelId });
+
+    if(checkPay.paid_status == "pedding"){
+      return res.json({success:false,message:"Your Not Allowed To Give Your Land if it's transfer pedding"})
+    }
     const transfer_fees = transferFees(landSqm.area_sqm, transfer_reason);
+
 
     const register = await Transfer.create({
       parcelId,
@@ -62,7 +77,7 @@ export const Register = async (req, res) => {
       transfer_reason,
     });
 
-    return res.json({ success: true, message: "Land Transfered Success" });
+    return res.json({ success: true, message: "Land Transfer Declare Success Pay it on Payment Form to be Transfered" });
   } catch (error) {
     res.json({ success: false, message: error.message });
   }
@@ -92,21 +107,72 @@ export const Update = async (req, res) => {
       transfer_reason,
     } = req.body;
 
+        if (old_ownerId == new_ownerId) {
+          return res.json({
+            success: false,
+            message: "This Is Already Your Land",
+          });
+        }
+
+        const landSqm = await Transfer.findById({ _id: id });
+
+
+        if (landSqm.old_ownerId != old_ownerId) {
+          return res.json({
+            succcess: false,
+            message: "This is Not Owner Of this Land",
+          });
+        }
+
+        if (landSqm.parcel_status == "not for sale") {
+          return res.json({
+            success: false,
+            message:
+              "Land Can Be Transfer Only has For Sale or Available Status Update Status And Retry ",
+          });
+        }
+
     const transfer = await Transfer.findById({ _id: id });
+
+    if(transfer.paid_status == "paid"){
+      return res.json({success:false,message:"You can't Updated Transfer Declaration"})
+    }
+    const parcel = await Parcel.findById({_id:transfer.parcelId})
     if (transfer_reason) {
       if (transfer_reason !== "inheritance") {
-        const fees = (transfer.transfer_fees * 100) / 20;
-        await Transfer.findByIdAndUpdate({
-          parcelId,
-          transfer_date,
-          old_ownerId,
-          new_ownerId,
-          transfer_fees: fees,
-          transfer_reason,
-        });
+        
+        let fees = (transfer.transfer_fees * 100) / 20;
+        if (parcel.area_sqm * 500 != fees || parcel.area_sqm * 800 != fees){
+          fees = transferFees(parcel.area_sqm, transfer_reason);
+        }
+          await Transfer.findByIdAndUpdate(
+            { _id: id },
+            {
+              parcelId,
+              transfer_date,
+              old_ownerId,
+              new_ownerId,
+              transfer_fees: fees,
+              transfer_reason,
+            },
+          );
         return res.json({ succcess: true, message: "Tranfer Update Success" });
       }
     }
+     await Transfer.findByIdAndUpdate(
+            { _id: id },
+            {
+              parcelId,
+              transfer_date,
+              old_ownerId,
+              new_ownerId,
+              transfer_reason,
+            },)
+            return res.json({
+              succcess: true,
+              message: "Tranfer Update Success",
+            });
+
   } catch (error) {
     res.json({ success: false, message: error.message });
   }
@@ -117,7 +183,7 @@ export const Update = async (req, res) => {
 export const RemoveTransfer = async (req, res) => {
   try {
     const { id } = req.params;
-    const remove = findByIdAndDelete({ _id: id });
+    const remove = await Transfer.findByIdAndDelete({ _id: id });
     return res.json({
       success: true,
       message:

@@ -4,7 +4,7 @@ import mongoose from "mongoose";
 
 const PaymentReceiptSchema = mongoose.Schema(
   {
-    tansferId: {
+    transferId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "ownershipTransfer",
     },

@@ -16,6 +16,12 @@ export const Register = async (req, res) => {
     if(amount_paid != fees.transfer_fees){
       return res.json({success:false,message:`Sorry You Must Pay Only ${fees.transfer_fees}`})
     }
+    
+    const checkAlreadyPay = fees.paid_status == "paid"
+
+    if(checkAlreadyPay){
+      return res.json({success:true,message:"You Already Paid"})
+    }
 
     const register = await Receipt.create({
       transferId,
@@ -28,7 +34,7 @@ export const Register = async (req, res) => {
       { _id: fees.parcelId },
       { land_owner_id: fees.new_ownerId },
     );
-
+    await Transfer.findByIdAndUpdate({ _id: transferId },{paid_status:"paid"});
     return res.json({ success: true, message: "Your Payment Has Been Success And Land Transfer Created" });
   } catch (error) {
     res.json({ success: false, message: error.message });
