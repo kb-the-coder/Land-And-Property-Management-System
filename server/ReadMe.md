@@ -16,38 +16,36 @@ Land officers manually record owner details such as national ID, full name, cont
 1.  **Insert** operation should be used on all four (4) forms (LandOwner, LandParcel, OwnershipTransfer and PaymentReceipt)
 2.  **Delete, update, retrieve** operations should only be used on OwnershipTransfer form.
 
-
-
 **Database : LPMS**
 
 > APi Router
 
 <For User
 
-**POST(Register)** : `http://localhost:3400/api/user/register`
-**POST(Login)** : `http://localhost:3400/api/user/login`
+**POST(Register)** : `http://localhost:3400/api/user/register`(name,email,password)
+**POST(Login)** : `http://localhost:3400/api/user/login`(email,password)
 
 <For Land Owner
 
-**POST(Register)** : `http://localhost:3400/api/owner/register`
+**POST(Register)** : `http://localhost:3400/api/owner/register`(nationalId, first_name, last_name, email, telephone, address )
 **GET(Display All)** : `http://localhost:3400/api/owner/display`
 **GET(Display One By Id)** : `http://localhost:3400/owner/display/:id`
 
 <For Land Parcel
 
-**POST(Register)** : `http://localhost:3400/api/land/register`
+**POST(Register)** : `http://localhost:3400/api/land/register`(area_sqm, location, parcel_status, land_use_type, land_owner_id )
 **GET(Display All)** : `http://localhost:3400/api/land/display`
 **GET(Display One By Id)** : `http://localhost:3400/land/display/:id`
 
 <For Ownership Transfer
 
-**POST(Register)** : `http://localhost:3400/api/transfer/register`
+**POST(Register)** : `http://localhost:3400/api/transfer/register`( parcelId, transfer_date, old_ownerId, new_ownerId,transfer_reason)
 **GET(Display All)** : `http://localhost:3400/api/transfer/display`
-**PUT(Update One By Id)** : `http://localhost:3400/transfer/update/:id`
+**PUT(Update One By Id)** : `http://localhost:3400/transfer/update/:id`( parcelId, transfer_date, old_ownerId, new_ownerId,transfer_reason)
 **DELETE(Delete One By Id)** : `http://localhost:3400/transfer/delete/:id`
 
 <For Payment Receipt
 
-**POST(Register)** : `http://localhost:3400/api/receipt/register`
+**POST(Register)** : `http://localhost:3400/api/receipt/register`(transferId, amount_paid, payment_date, payment_method )
 **GET(Display All)** : `http://localhost:3400/api/receipt/display`
 **GET(Display One By Id)** : `http://localhost:3400/receipt/display/:id`
