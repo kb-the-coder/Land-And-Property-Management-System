@@ -45,8 +45,7 @@ export const Register = async (req, res) => {
 
     const landSqm = await Parcel.findById({ _id: parcelId });
 
-
-    if (landSqm.land_owner_id !== old_ownerId) {
+    if (landSqm.land_owner_id != old_ownerId) {
       return res.json({succcess:false,message:"This is Not Owner Of this Land"});
     }
 
@@ -62,7 +61,7 @@ export const Register = async (req, res) => {
 
     const checkPay =await Transfer.findOne({ parcelId: parcelId });
 
-    if(checkPay.paid_status == "pedding"){
+    if(checkPay?.paid_status == "pedding"){
       return res.json({success:false,message:"Your Not Allowed To Give Your Land if it's transfer pedding"})
     }
     const transfer_fees = transferFees(landSqm.area_sqm, transfer_reason);
@@ -139,7 +138,7 @@ export const Update = async (req, res) => {
     }
     const parcel = await Parcel.findById({_id:transfer.parcelId})
     if (transfer_reason) {
-      if (transfer_reason !== "inheritance") {
+      if (transfer_reason != "inheritance") {
         
         let fees = (transfer.transfer_fees * 100) / 20;
         if (parcel.area_sqm * 500 != fees || parcel.area_sqm * 800 != fees){
@@ -159,6 +158,7 @@ export const Update = async (req, res) => {
         return res.json({ succcess: true, message: "Tranfer Update Success" });
       }
     }
+    const fees = transferFees(parcel.area_sqm,transfer_reason)
      await Transfer.findByIdAndUpdate(
             { _id: id },
             {
@@ -166,7 +166,8 @@ export const Update = async (req, res) => {
               transfer_date,
               old_ownerId,
               new_ownerId,
-              transfer_reason,
+              transfer_fees: fees,
+              transfer_reason
             },)
             return res.json({
               succcess: true,

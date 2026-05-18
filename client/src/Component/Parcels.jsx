@@ -19,6 +19,44 @@ const Parcels = () => {
     land_owner_id:""
   });
 
+   
+  const handleFormData = async (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    console.log(formData);
+    try {
+      if (
+        !formData.area_sqm ||
+        !formData.location ||
+        !formData.land_use_type ||
+        !formData.parcel_status ||
+        !formData.land_owner_id
+      ) {
+        return toast.error("You Must Fill all Field");
+      }
+
+      const res = await axios.post(`${API_URL_L}/register`, formData);
+      if (!res.data.success) {
+        return toast.error(res.data.message);
+      }
+      toast.success(res.data.message);
+      setFormData({
+        nationalId: "",
+        first_name: "",
+        last_name: "",
+        email: "",
+        telephone: "",
+        address: "",
+      });
+    } catch (error) {
+      toast.error(error.message);
+    }
+  };
+  
   useEffect(() => {
     const fecthData = async () => {
       try {
@@ -49,48 +87,12 @@ const Parcels = () => {
       };
       fecthData();
     }, [formData]);
- 
-  const handleFormData = async (e) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
-  };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    console.log(formData)
-    try {
-      if (
-        !formData.area_sqm ||
-        !formData.location ||
-        !formData.land_use_type ||
-        !formData.parcel_status ||
-        !formData.land_owner_id 
-      ) {
-        return toast.error("You Must Fill all Field");
-      }
-
-      const res = await axios.post(`${API_URL_L}/register`, formData);
-      if (!res.data.success) {
-        return toast.error(res.data.message);
-      }
-      toast.success(res.data.message);
-      setFormData({
-        nationalId: "",
-        first_name: "",
-        last_name: "",
-        email: "",
-        telephone: "",
-        address: "",
-      });
-    } catch (error) {
-      toast.error(error.message);
-    }
-  };
   return (
     <div className="p-1 flex flex-col gap-2 w-full ">
       <div className="bg-white/50 rounded-md px-4 py-2 flex justify-between items-center">
         <h1 className="md:text-xl font-bold text-indigo-500 text-md">
-          Register Land Owner
+          Register Land
         </h1>
         <div
           className="p-2 text-white/90 rounded-lg bg-green-500 flex items-center gap-2"
