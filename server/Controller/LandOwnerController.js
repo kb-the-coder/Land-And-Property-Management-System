@@ -1,3 +1,4 @@
+import { trusted } from "mongoose";
 import Owner from "../Models/LandOwnerModel.js";
 
 // Insert LandOwner API Function
@@ -50,9 +51,9 @@ export const Display = async (req, res) => {
       return res.json({ success: true, p });
     }
     const Person = await Owner.find().sort({ createdAt: -1 });
-    return res.json({ success: false, Person });
+    return res.json({ success: true, Person });
   } catch (error) {
-    res.json({ success: true, message: error.message });
+    res.json({ success: false, message: error.message });
   }
 };
 

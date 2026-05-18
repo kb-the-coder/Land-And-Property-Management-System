@@ -49,3 +49,12 @@ export const Login = async(req,res)=>{
         res.json({ success: false, message: error.message });
     }
 }
+
+export const verify = async(req,res)=>{
+    try {
+        const user = req.user
+        return res.json({success:true,user})
+    } catch (error) {
+        res.json({success:false,message:error.message})
+    }
+}

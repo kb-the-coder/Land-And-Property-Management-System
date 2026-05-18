@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   FaCheckCircle,
   FaCheckDouble,
@@ -15,6 +15,37 @@ import {
 import { MdWarning } from "react-icons/md";
 
 const Dashboard = () => {
+const [data, setData] = useState([
+  {
+    land: "PR0123",
+    Old_Owner: "Pazzo",
+    New_Owner: "Bonheur",
+    fees: "3000",
+    date: "2012-12-01",
+  },
+  {
+    land: "PR0123",
+    Old_Owner: "Pazzo",
+    New_Owner: "Bonheur",
+    fees: "3000",
+    date: "2012-12-01",
+  },
+  {
+    land: "PR0123",
+    Old_Owner: "Pazzo",
+    New_Owner: "Bonheur",
+    fees: "3000",
+    date: "2012-12-01",
+  },
+  {
+    land: "PR0123",
+    Old_Owner: "Pazzo",
+    New_Owner: "Bonheur",
+    fees: "3000",
+    date: "2012-12-01",
+  },
+]);
+
   return (
     <div className="p-1 flex flex-col gap-2 w-full ">
       <div className="bg-white/50 rounded-md p-2">
@@ -90,10 +121,10 @@ const Dashboard = () => {
           <MdWarning />
           <h1>Pedding Transfer</h1>
         </div>
-        <table className="">
+        <table className="rounded-t-2xl p-1">
           <thead className="">
-            <tr>
-              <th>No</th>
+            <tr className="bg-indigo-400 text-white/70">
+              <th className="p-1">No</th>
               <th>Land</th>
               <th>Old Owner</th>
               <th>New Owner</th>
@@ -102,38 +133,16 @@ const Dashboard = () => {
             </tr>
           </thead>
           <tbody>
-            <tr className="hover:bg-indigo-500/50">
-              <td className="p-1 ">1</td>
-              <td>PR00721</td>
-              <td>Bonheur</td>
-              <td>Pazzo</td>
-              <td>200 Frw</td>
-              <td>2020-17-01</td>
-            </tr>
-            <tr>
-              <td className="p-1 ">1</td>
-              <td>PR00721</td>
-              <td>Bonheur</td>
-              <td>Pazzo</td>
-              <td>200 Frw</td>
-              <td>2020-17-01</td>
-            </tr>
-            <tr className="p-1 ">
-              <td className="p-2">1</td>
-              <td>PR00721</td>
-              <td>Bonheur</td>
-              <td>Pazzo</td>
-              <td>200 Frw</td>
-              <td>2020-17-01</td>
-            </tr>
-            <tr>
-              <td className="p-1">1</td>
-              <td>PR00721</td>
-              <td>Bonheur</td>
-              <td>Pazzo</td>
-              <td>200 Frw</td>
-              <td>2020-17-01</td>
-            </tr>
+            {data.map((i, x) => (
+              <tr className="text-center hover:bg-indigo-300 cursor-pointer text-gray-900 font-extralight">
+                <td className="p-1">{x + 1}</td>
+                <td> {i.land} </td>
+                <td> {i.Old_Owner} </td>
+                <td> {i.New_Owner} </td>
+                <td> {i.fees} </td>
+                <td> {i.date} </td>
+              </tr>
+            ))}
           </tbody>
         </table>
       </div>

@@ -1,13 +1,21 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { NavLink, Outlet, useNavigate } from 'react-router-dom';
 import { FaAtlas, FaBars, FaBone, FaBroadcastTower, FaExchangeAlt, FaHome, FaHouseUser, FaLandmark, FaMapMarked, FaMapMarkedAlt, FaMapMarker, FaMapMarkerAlt, FaMapPin, FaMapSigns, FaRegHandPointRight, FaUser, FaUserAlt, FaUserEdit } from 'react-icons/fa'
 import { MdAnalytics, MdCopyAll, MdDashboard, MdDocumentScanner, MdEditDocument, MdLogout, MdOutlineAnalytics, MdOutlineAppRegistration, MdPages, MdPayment, MdReceipt, MdReport } from "react-icons/md";
+import { userAuth } from '../Context/AuthContext';
 
 const Pannel = () => {
-  const nav = useNavigate()
+  const nav = useNavigate();
+  const {user,logout} = userAuth();
+useEffect(()=>{
+  if(!user){
+    nav("/login")
+  }
+})
     const [menu,setMenu] = useState(false)
     const Out = ()=>{
       nav("/login")
+      logout()
     }
   return (
     <div>
@@ -41,7 +49,7 @@ const Pannel = () => {
               </NavLink>
             </li>
             <li>
-              <NavLink className="flex items-center gap-2 text-lg font-semibold text-white/70 hover:bg-white/50 hover:text-indigo-500 rounded-md p-2">
+              <NavLink to="land" className="flex items-center gap-2 text-lg font-semibold text-white/70 hover:bg-white/50 hover:text-indigo-500 rounded-md p-2">
                 <FaMapSigns className="text-3xl text-white  p-0.5 rounded-md" />
                 <p>Land Parcel</p>
               </NavLink>
@@ -86,14 +94,14 @@ const Pannel = () => {
               </h1>
             </div>
             <div className="flex gap-2 items-center ">
-              <div className="flex items-center gap-2 bg-gray-500/50 p-1 rounded-lg">
-                <FaUser className="bg-indigo-500/50 text-3xl p-1 rounded-full" />
-                <p className="text-md font-semibold text-indigo-500">Admin</p>
+              <div className="flex items-center gap-2 bg-gray-500/20 px-2 p-1 rounded-lg">
+                <FaUser className="bg-indigo-500/50 text-xl md:text-3xl p-1 rounded-full" />
+                <p className="text-sm md:text-md font-semibold text-indigo-500 capitalize">{user?.name}</p>
               </div>
               <div className="">
                 <MdLogout
                   onClick={Out}
-                  className="bg-red-400 text-white font-semibold text-4xl p-2 cursor-pointer rounded-md"
+                  className="bg-red-400 text-white font-semibold text-3xl md:text-4xl p-1 md:p-2 cursor-pointer rounded-md"
                 />
               </div>
             </div>

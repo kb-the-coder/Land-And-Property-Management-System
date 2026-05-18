@@ -1,15 +1,22 @@
 import axios from 'axios';
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import toast from 'react-hot-toast';
 import { Link, useNavigate } from 'react-router-dom';
+import { userAuth } from '../Context/AuthContext';
 
 const Login = () => {
     const API_URL = "http://localhost:3400/api/user";
     const nav = useNavigate()
+    const {user,login} =userAuth()
     const [data,setData] = useState({
         email:"",
         password:""
     })
+    useEffect(()=>{
+      if(user){
+        nav("/")
+      }
+    },[])
 
     const handleData = async(e)=>{
         const {name,value} = e.target;
@@ -28,6 +35,7 @@ const Login = () => {
             }
             toast.success(res.data.message)
             localStorage.setItem("token",res.data.token)
+            login(res.data.user)
             return nav("/")
         } catch (error) {
             toast.error(error.message)
