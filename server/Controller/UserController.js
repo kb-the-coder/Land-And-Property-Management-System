@@ -30,7 +30,7 @@ export const Login = async(req,res)=>{
     try {
         const {email,password} = req.body;
         const emailExist = await User.findOne({ email });
-        if (!email) {
+        if (!emailExist) {
           return res.json({ success: false, message: "Email Not  Exist" });
         }
         const isMatch = await bcrypt.compare(password,emailExist.password)

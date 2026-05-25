@@ -24,7 +24,6 @@ const Owners = () => {
           return toast.error(res.data.message)
         }
         setData(res.data.Person)
-        console.log(res.data)
       } catch (error) {
         alert(error.message)
       }

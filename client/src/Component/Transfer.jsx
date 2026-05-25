@@ -182,7 +182,7 @@ const Transfer = () => {
     <div className="p-1 flex flex-col gap-2 w-full ">
       <div className="bg-white/50 rounded-md px-4 py-2 flex justify-between items-center">
         <h1 className="md:text-xl font-bold text-indigo-500 text-md">
-          Register Land Owner
+          Transfer Ownership Application
         </h1>
         <div
           className="p-2 text-white/90 rounded-lg bg-green-500 flex items-center gap-2"
@@ -190,7 +190,7 @@ const Transfer = () => {
             setModel(true);
           }}
         >
-          <FaPlus /> <p className="md:block hidden">Add New Owner</p>
+          <FaPlus /> <p className="md:block hidden">Declare Transfer</p>
         </div>
       </div>
       <div className="bg-white/50 p-4 rounded-lg block md:hidden">
@@ -333,7 +333,7 @@ const Transfer = () => {
             >
               <div className="flex items-center justify-between p-4">
                 <h1 className="text-xl font-semibold text-green-500">
-                  Add Owner
+                  Transfer Application Form
                 </h1>
                 <div
                   className=""

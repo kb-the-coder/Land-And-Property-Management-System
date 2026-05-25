@@ -12,10 +12,6 @@ export const Register = async (req, res) => {
     }
 
     const fees = await Transfer.findById({_id:transferId})
-   
-    if(amount_paid != fees.transfer_fees){
-      return res.json({success:false,message:`Sorry You Must Pay Only ${fees.transfer_fees}`})
-    }
     
     const checkAlreadyPay = fees.paid_status == "paid"
 
