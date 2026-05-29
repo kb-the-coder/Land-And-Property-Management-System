@@ -49,7 +49,10 @@ useEffect(()=>{
               </NavLink>
             </li>
             <li>
-              <NavLink to="land" className="flex items-center gap-2 text-lg font-semibold text-white/70 hover:bg-white/50 hover:text-indigo-500 rounded-md p-2">
+              <NavLink
+                to="land"
+                className="flex items-center gap-2 text-lg font-semibold text-white/70 hover:bg-white/50 hover:text-indigo-500 rounded-md p-2"
+              >
                 <FaMapSigns className="text-3xl text-white  p-0.5 rounded-md" />
                 <p>Land Parcel</p>
               </NavLink>
@@ -96,7 +99,9 @@ useEffect(()=>{
             <div className="flex gap-2 items-center ">
               <div className="flex items-center gap-2 bg-gray-500/20 px-2 p-1 rounded-lg">
                 <FaUser className="bg-indigo-500/50 text-xl md:text-3xl p-1 rounded-full" />
-                <p className="text-sm md:text-md font-semibold text-indigo-500 capitalize">{user?.name}</p>
+                <p className="text-sm md:text-md font-semibold text-indigo-500 capitalize">
+                  {user?.name}
+                </p>
               </div>
               <div className="">
                 <MdLogout
@@ -135,7 +140,7 @@ useEffect(()=>{
               </li>
               <li>
                 <NavLink to="report" title="Report">
-                  <MdEditDocument className="text-3xl text-white hover:bg-indigo-600 p-0.5 rounded-md" />
+                  <MdOutlineAnalytics className="text-3xl text-white hover:bg-indigo-600 p-0.5 rounded-md" />
                 </NavLink>
               </li>
             </ul>

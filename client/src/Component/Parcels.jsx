@@ -95,7 +95,7 @@ const Parcels = () => {
           Register Land
         </h1>
         <div
-          className="p-2 text-white/90 rounded-lg bg-green-500 flex items-center gap-2"
+          className="p-2 text-white/90 rounded-lg bg-green-500 flex items-center gap-2 cursor-pointer"
           onClick={() => {
             setModel(true);
           }}
@@ -109,7 +109,9 @@ const Parcels = () => {
             <div className="w-full bg-white p-2 rounded-lg" key={i}>
               <h1 className="text-gray-500">{i + 1}</h1>
               <div className="flex justify-between">
-                <h1 className="font-semibold text-indigo-500">Area / Square:</h1>
+                <h1 className="font-semibold text-indigo-500">
+                  Area / Square:
+                </h1>
                 <p className="text-gray-800">{o.area_sqm}</p>
               </div>
               <div className="flex justify-between">
@@ -264,11 +266,9 @@ const Parcels = () => {
                   >
                     <option value="">Select Land Status</option>
                     <option value="available">Available</option>
-                    <option value="for sale">
-                      For Sale
-                    </option>
+                    <option value="for sale">For Sale</option>
                     <option value="not for sale">Not For Sale</option>
-                   </select>
+                  </select>
                 </div>
 
                 <div className="flex flex-col gap-1">

@@ -67,7 +67,7 @@ const Owners = () => {
           Register Land Owner
         </h1>
         <div
-          className="p-2 text-white/90 rounded-lg bg-green-500 flex items-center gap-2"
+          className="p-2 text-white/90 rounded-lg bg-green-500 flex items-center gap-2 cursor-pointer"
           onClick={() => {
             setModel(true);
           }}

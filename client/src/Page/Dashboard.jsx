@@ -1,4 +1,6 @@
-import React, { useState } from "react";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 import {
   FaCheckCircle,
   FaCheckDouble,
@@ -15,7 +17,7 @@ import {
 import { MdWarning } from "react-icons/md";
 
 const Dashboard = () => {
-const [data, setData] = useState([
+const [dataf, setDataf] = useState([
   {
     land: "PR0123",
     Old_Owner: "Pazzo",
@@ -45,7 +47,57 @@ const [data, setData] = useState([
     date: "2012-12-01",
   },
 ]);
+const API_URL = "http://localhost:3400/api/owner";
+  const API_URL_L = "http://localhost:3400/api/land";
+  const API_URL_T = "http://localhost:3400/api/transfer";
+  const [data, setData] = useState([]);
+  const [landData, setLandData] = useState([]);
+  const [transferData, setTransferData] = useState([]);
+  
+  useEffect(() => {
+    const fecthData = async () => {
+      try {
+        const res = await axios.get(`${API_URL_L}/display`);
+        if (!res.data.success) {
+          return toast.error(res.data.message);
+        }
+        setLandData(res.data.Land);
+        console.log(res.data);
+      } catch (error) {
+        alert(error.message);
+      }
+    };
+        const fecthDataT = async () => {
+          try {
+            const res = await axios.get(`${API_URL_T}/display`);
+            if (!res.data.success) {
+              return toast.error(res.data.message);
+            }
+            setTransferData(res.data.transfer);
+          } catch (error) {
+            alert(error.message);
+          }
+        };
+        fecthDataT()
+    fecthData();
+  }, []);
 
+  useEffect(() => {
+    const fecthData = async () => {
+      try {
+        const res = await axios.get(`${API_URL}/display`);
+        if (!res.data.success) {
+          return toast.error(res.data.message);
+        }
+        setData(res.data.Person);
+      } catch (error) {
+        alert(error.message);
+      }
+    };
+    fecthData();
+  }, []);
+  const unpaid = transferData.filter((o) => o.paid_status != "paid");
+  console.log(unpaid)
   return (
     <div className="p-1 flex flex-col gap-2 w-full ">
       <div className="bg-white/50 rounded-md p-2">
@@ -58,7 +110,7 @@ const [data, setData] = useState([
             <h1 className=" text-cyan-500 font-semibold text-md">
               Total Owners
             </h1>
-            <p className="text-center text-sm text-gray-500">10</p>
+            <p className="text-center text-sm text-gray-500">{data.length}</p>
           </div>
         </div>
         <div className="bg-amber-500/10  p-2 rounded-lg flex justify-evenly items-center gap-2">
@@ -67,7 +119,9 @@ const [data, setData] = useState([
             <h1 className=" text-amber-500 font-semibold text-md">
               Total Parcel
             </h1>
-            <p className="text-center text-sm text-gray-500">10</p>
+            <p className="text-center text-sm text-gray-500">
+              {landData.length}
+            </p>
           </div>
         </div>
         <div className="bg-green-500/10  p-2 rounded-lg flex justify-evenly items-center gap-2">
@@ -76,7 +130,9 @@ const [data, setData] = useState([
             <h1 className=" text-green-500 font-semibold text-md">
               Total Transfer
             </h1>
-            <p className="text-center text-sm text-gray-500">10</p>
+            <p className="text-center text-sm text-gray-500">
+              {transferData.length}
+            </p>
           </div>
         </div>
         <div className="bg-red-500/10  p-2 rounded-lg flex justify-evenly items-center gap-2">
@@ -85,34 +141,7 @@ const [data, setData] = useState([
             <h1 className=" text-red-500 font-semibold text-md">
               Unpaid Transfer
             </h1>
-            <p className="text-center text-sm text-gray-500">10</p>
-          </div>
-        </div>
-      </div>
-      <div className="bg-white/50 p-4 flex flex-col gap-2 rounded-lg">
-        <h1 className="p-2 text-xl text-indigo-500">Recent Activity</h1>
-        <div className="bg-green-500/10 px-2 py-1 rounded-lg">
-          <h1 className="text-green-500 font-semibold">Ownership Transfer</h1>
-          <div className="text-sm text-gray-500">
-            Bosco's land( PR0021 ) Transfer To Alice{" "}
-          </div>
-        </div>
-        <div className="bg-amber-500/10 px-2 py-1 rounded-lg">
-          <h1 className="text-amber-500 font-semibold">Land Register</h1>
-          <div className="text-sm text-gray-500">
-            Land ( PR710 ) Register To Pazzo{" "}
-          </div>
-        </div>
-        <div className="bg-green-500/10 px-2 py-1 rounded-lg">
-          <h1 className="text-green-500 font-semibold">Ownership Transfer</h1>
-          <div className="text-sm text-gray-500">
-            Land( PR0021 ) Register To Pazzo{" "}
-          </div>
-        </div>
-        <div className="bg-yellow-500/10 px-2 py-1 rounded-lg">
-          <h1 className="text-yellow-500 font-semibold">Transfer Payment</h1>
-          <div className="text-sm text-gray-500">
-            Bosco & Alice land Transfer Successful Paid{" "}
+            <p className="text-center text-sm text-gray-500">{unpaid.length}</p>
           </div>
         </div>
       </div>
@@ -121,30 +150,36 @@ const [data, setData] = useState([
           <MdWarning />
           <h1>Pedding Transfer</h1>
         </div>
-        <table className="rounded-t-2xl p-1">
-          <thead className="">
-            <tr className="bg-indigo-400 text-white/70">
-              <th className="p-1">No</th>
-              <th>Land</th>
-              <th>Old Owner</th>
-              <th>New Owner</th>
-              <th>Fees</th>
-              <th>Date</th>
-            </tr>
-          </thead>
-          <tbody>
-            {data.map((i, x) => (
-              <tr className="text-center hover:bg-indigo-300 cursor-pointer text-gray-900 font-extralight">
-                <td className="p-1">{x + 1}</td>
-                <td> {i.land} </td>
-                <td> {i.Old_Owner} </td>
-                <td> {i.New_Owner} </td>
-                <td> {i.fees} </td>
-                <td> {i.date} </td>
+        {unpaid.length == 0 ? (
+          <p className="flex items-center justify-center gap-2 p-2 text-sm text-gray-500">
+            There's No Pedding Transfer
+          </p>
+        ) : (
+          <table className="rounded-t-2xl p-1">
+            <thead className="">
+              <tr className="bg-indigo-400 text-white/70">
+                <th className="p-1">No</th>
+                <th>Land</th>
+                <th>Old Owner</th>
+                <th>New Owner</th>
+                <th>Fees</th>
+                <th>Date</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {unpaid.map((i, x) => (
+                <tr className="text-center hover:bg-indigo-300 cursor-pointer text-gray-900 font-extralight">
+                  <td className="p-1">{x + 1}</td>
+                  <td> {i.parcelId?.area_sqm} </td>
+                  <td> {i.old_ownerId?.first_name} </td>
+                  <td> {i.new_ownerId?.first_name} </td>
+                  <td> {i.transfer_fees} </td>
+                  <td> {new Date(i.transfer_date).toLocaleDateString()} </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
       </div>
     </div>
   );

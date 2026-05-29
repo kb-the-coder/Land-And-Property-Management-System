@@ -21,6 +21,8 @@ const Receipt = () => {
     const [dataT, setDataT] = useState([]);
     const [landData,setLandData] = useState([])
     const [model, setModel] = useState(false);
+    const [certicateData,setCerticateDate] = useState(null)
+    console.log(certicateData)
     const [certicateModel, setCerticateModel] = useState(false);
     const [formData, setFormData] = useState({
       transferId: "",
@@ -125,12 +127,12 @@ const Receipt = () => {
   return (
     <div>
       <div className="p-1 flex flex-col gap-2 w-full ">
-        <div className="bg-white/50 rounded-md px-4 py-2 flex justify-between items-center">
+        <div className="bg-white/40 rounded-sm px-4 py-2 flex justify-between items-center">
           <h1 className="md:text-xl font-bold text-indigo-500 text-md">
             Payment Declaration
           </h1>
           <div
-            className="p-2 text-white/90 rounded-lg bg-green-500 flex items-center gap-2"
+            className="p-2 text-white/90 rounded-lg bg-green-500 flex items-center gap-2 cursor-pointer"
             onClick={() => {
               setModel(true);
             }}
@@ -173,8 +175,11 @@ const Receipt = () => {
                 </div>
                 <div className="flex justify-center p-2">
                   <button
-                    onClick={() => setCerticateModel(true)}
-                    className="flex items-center gap-2 justify-center p-2 w-full rounded-xl text-md text-white bg-gray-800"
+                    onClick={() => {
+                      setCerticateModel(true);
+                      setCerticateDate(o);
+                    }}
+                    className="flex items-center gap-2 justify-center p-2 w-full rounded-xl text-md text-white bg-gray-800 cursor-pointer"
                   >
                     <FaCertificate className="text-yellow-500" />
                     <p>Generate Certificate</p>
@@ -209,7 +214,10 @@ const Receipt = () => {
                     <td className="px-2">{o.payment_method}</td>
                     <td className="px-2">
                       <button
-                        onClick={() => setCerticateModel(true)}
+                        onClick={() => {
+                          setCerticateModel(true);
+                          setCerticateDate(o);
+                        }}
                         className="flex items-center gap-1 justify-center p-1 w-full rounded-md text-md text-white bg-green-500"
                       >
                         <FaCertificate className="text-yellow-500" />
@@ -230,7 +238,7 @@ const Receipt = () => {
             }}
           >
             <div
-              className="bg-white/95 w-120 p-4 rounded-2xl"
+              className="bg-white/95 w-120 p-4 rounded-xl"
               onClick={(e) => {
                 e.stopPropagation();
               }}
@@ -239,8 +247,35 @@ const Receipt = () => {
                 className="flex
               flex-col gap-4 w-full"
               >
-                <h1>Land Transfer Certicate</h1>
-                <p>Patrick's Land is Successfull Certicatefied Transfer </p>
+                <div className="">
+                  <h1 className="text-xl font-bold text-indigo-500">
+                    Land Transfer Certicate
+                  </h1>
+                  <p>Patrick's Land is Successfull Certicatefied Transfer </p>
+                </div>
+                <div className="p-4 bg-indigo-100">
+                  <div className="flex justify-between">
+                    <h1 className="text-indigo-500">LandNumber:</h1>
+                    <p>{certicateData?.transferId?._id}</p>
+                  </div>
+                  <div className="flex justify-between">
+                    <h1 className="text-indigo-500">Transfer Fees:</h1>
+                    <p>{certicateData?.transferId?.transfer_fees}</p>
+                  </div>
+                  <div className="flex justify-between">
+                    <h1 className="text-indigo-500">Amount Paid:</h1>
+                    <p>{certicateData?.amount_paid}</p>
+                  </div>
+                  <div className="flex justify-between">
+                    <h1 className="text-indigo-500">Payment Date:</h1>
+                    <p>{certicateData?.payment_date}</p>
+                  </div>
+                </div>
+                <div className="flex justify-end">
+                  <button onClick={()=>{setCerticateModel(false); setCerticateDate(null)}} className="flex items-center gap-2 bg-red-400 p-2 rounded-md text-white">
+                    <FaTimes /> Close
+                  </button>
+                </div>
               </div>
             </div>
           </div>
